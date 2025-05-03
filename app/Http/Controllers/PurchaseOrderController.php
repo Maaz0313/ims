@@ -16,13 +16,69 @@ class PurchaseOrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $purchaseOrders = PurchaseOrder::with(['supplier', 'user'])
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $query = PurchaseOrder::with(['supplier', 'user']);
 
-        return view('purchase-orders.index', compact('purchaseOrders'));
+        // Text search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('po_number', 'like', "%{$search}%")
+                    ->orWhere('notes', 'like', "%{$search}%")
+                    ->orWhereHas('supplier', function ($sq) use ($search) {
+                        $sq->where('name', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        // Supplier filter
+        if ($request->filled('supplier_id')) {
+            $query->where('supplier_id', $request->supplier_id);
+        }
+
+        // Date range
+        if ($request->filled('date_from')) {
+            $query->whereDate('order_date', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $query->whereDate('order_date', '<=', $request->date_to);
+        }
+
+        // Expected delivery date range
+        if ($request->filled('delivery_from')) {
+            $query->whereDate('expected_delivery_date', '>=', $request->delivery_from);
+        }
+        if ($request->filled('delivery_to')) {
+            $query->whereDate('expected_delivery_date', '<=', $request->delivery_to);
+        }
+
+        // Status filter
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Amount range
+        if ($request->filled('min_amount')) {
+            $query->where('total_amount', '>=', $request->min_amount);
+        }
+        if ($request->filled('max_amount')) {
+            $query->where('total_amount', '<=', $request->max_amount);
+        }
+
+        // Sorting
+        $sortField = $request->input('sort_by', 'created_at');
+        $sortDirection = $request->input('sort_direction', 'desc');
+        $query->orderBy($sortField, $sortDirection);
+
+        $purchaseOrders = $query->paginate(15);
+        $suppliers = Supplier::orderBy('name')->get();
+
+        if ($request->ajax()) {
+            return view('purchase-orders.partials.purchase_orders_table', compact('purchaseOrders'))->render();
+        }
+
+        return view('purchase-orders.index', compact('purchaseOrders', 'suppliers'));
     }
 
     /**

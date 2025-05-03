@@ -14,10 +14,76 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with(['category', 'supplier', 'inventory'])->orderBy('name')->get();
-        return view('products.index', compact('products'));
+        $query = Product::with(['category', 'supplier', 'inventory']);
+
+        // Text search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('sku', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        // Category filter
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        // Supplier filter
+        if ($request->filled('supplier_id')) {
+            $query->where('supplier_id', $request->supplier_id);
+        }
+
+        // Price range
+        if ($request->filled('min_price')) {
+            $query->where('price', '>=', $request->min_price);
+        }
+        if ($request->filled('max_price')) {
+            $query->where('price', '<=', $request->max_price);
+        }
+
+        // Stock status
+        if ($request->filled('stock_status')) {
+            if ($request->stock_status === 'in_stock') {
+                $query->whereHas('inventory', function ($q) {
+                    $q->where('quantity', '>', 0);
+                });
+            } elseif ($request->stock_status === 'out_of_stock') {
+                $query->whereHas('inventory', function ($q) {
+                    $q->where('quantity', '=', 0);
+                });
+            } elseif ($request->stock_status === 'low_stock') {
+                $query->whereHas('inventory', function ($q) {
+                    $q->whereRaw('quantity <= reorder_level AND quantity > 0');
+                });
+            }
+        }
+
+        // Sorting
+        $sortField = $request->input('sort_by', 'name');
+        $sortDirection = $request->input('sort_direction', 'asc');
+
+        if ($sortField === 'stock') {
+            $query->join('inventory', 'products.id', '=', 'inventory.product_id')
+                ->orderBy('inventory.quantity', $sortDirection)
+                ->select('products.*');
+        } else {
+            $query->orderBy($sortField, $sortDirection);
+        }
+
+        $products = $query->paginate(15);
+        $categories = Category::orderBy('name')->get();
+        $suppliers = Supplier::orderBy('name')->get();
+
+        if ($request->ajax()) {
+            return view('products.partials.products_table', compact('products'))->render();
+        }
+
+        return view('products.index', compact('products', 'categories', 'suppliers'));
     }
 
     /**
@@ -43,7 +109,7 @@ class ProductController extends Controller
             'cost_price' => 'nullable|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
             'supplier_id' => 'nullable|exists:suppliers,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'quantity' => 'required|integer|min:0',
             'reorder_level' => 'required|integer|min:0',
             'location' => 'nullable|string|max:255',
@@ -112,7 +178,7 @@ class ProductController extends Controller
             'cost_price' => 'nullable|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
             'supplier_id' => 'nullable|exists:suppliers,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'quantity' => 'required|integer|min:0',
             'reorder_level' => 'required|integer|min:0',
             'location' => 'nullable|string|max:255',

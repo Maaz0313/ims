@@ -216,6 +216,10 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Live Search -->
+    <script src="{{ asset('js/live-search.js') }}"></script>
+    <!-- Form Controls -->
+    <script src="{{ asset('js/form-controls.js') }}"></script>
     @yield('scripts')
 </body>
 

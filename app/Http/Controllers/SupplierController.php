@@ -10,9 +10,44 @@ class SupplierController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $suppliers = Supplier::orderBy('name')->get();
+        $query = Supplier::with('products');
+
+        // Text search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('contact_person', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%")
+                    ->orWhere('address', 'like', "%{$search}%");
+            });
+        }
+
+        // Product count filter
+        if ($request->filled('min_products')) {
+            $query->has('products', '>=', $request->min_products);
+        }
+
+        // Sorting
+        $sortField = $request->input('sort_by', 'name');
+        $sortDirection = $request->input('sort_direction', 'asc');
+
+        if ($sortField === 'products_count') {
+            $query->withCount('products')
+                ->orderBy('products_count', $sortDirection);
+        } else {
+            $query->orderBy($sortField, $sortDirection);
+        }
+
+        $suppliers = $query->paginate(15);
+
+        if ($request->ajax()) {
+            return view('suppliers.partials.suppliers_table', compact('suppliers'))->render();
+        }
+
         return view('suppliers.index', compact('suppliers'));
     }
 

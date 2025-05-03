@@ -15,11 +15,52 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::with('user')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $query = Order::with('user');
+
+        // Text search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('order_number', 'like', "%{$search}%")
+                    ->orWhere('customer_name', 'like', "%{$search}%")
+                    ->orWhere('customer_email', 'like', "%{$search}%")
+                    ->orWhere('customer_phone', 'like', "%{$search}%");
+            });
+        }
+
+        // Date range
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        // Status filter
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Amount range
+        if ($request->filled('min_amount')) {
+            $query->where('grand_total', '>=', $request->min_amount);
+        }
+        if ($request->filled('max_amount')) {
+            $query->where('grand_total', '<=', $request->max_amount);
+        }
+
+        // Sorting
+        $sortField = $request->input('sort_by', 'created_at');
+        $sortDirection = $request->input('sort_direction', 'desc');
+        $query->orderBy($sortField, $sortDirection);
+
+        $orders = $query->paginate(15);
+
+        if ($request->ajax()) {
+            return view('orders.partials.orders_table', compact('orders'))->render();
+        }
 
         return view('orders.index', compact('orders'));
     }
@@ -30,7 +71,7 @@ class OrderController extends Controller
     public function create()
     {
         $products = Product::with(['category', 'inventory'])
-            ->whereHas('inventory', function($query) {
+            ->whereHas('inventory', function ($query) {
                 $query->where('quantity', '>', 0);
             })
             ->orderBy('name')
