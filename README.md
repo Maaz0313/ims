@@ -2,6 +2,15 @@
 
 A comprehensive inventory management solution built with Laravel, designed to streamline product tracking, order management, and inventory control for businesses of all sizes.
 
+## Live Demo
+
+Try out the live demo at: [https://ims.thehexters.com/login](https://ims.thehexters.com/login)
+
+**Demo Credentials:**
+
+-   **Email:** admin@example.com
+-   **Password:** password
+
 ## Features
 
 ### User Management & Security

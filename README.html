@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management System (IMS)</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            border-bottom: 2px solid #0366d6;
+            padding-bottom: 10px;
+            color: #0366d6;
+        }
+
+        h2 {
+            margin-top: 30px;
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: 10px;
+            color: #24292e;
+        }
+
+        h3 {
+            margin-top: 25px;
+            color: #24292e;
+        }
+
+        ul {
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        code {
+            background-color: #f6f8fa;
+            padding: 3px 5px;
+            border-radius: 3px;
+            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 85%;
+        }
+
+        pre {
+            background-color: #f6f8fa;
+            padding: 16px;
+            border-radius: 6px;
+            overflow: auto;
+            line-height: 1.45;
+        }
+
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+
+        .feature-item {
+            margin-bottom: 10px;
+        }
+
+        .feature-title {
+            font-weight: bold;
+        }
+
+        .command {
+            background-color: #f6f8fa;
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Inventory Management System (IMS)</h1>
+
+    <p>A comprehensive inventory management solution built with Laravel, designed to streamline product tracking, order
+        management, and inventory control for businesses of all sizes.</p>
+
+    <div
+        style="background-color: #e7f3ff; border-left: 4px solid #0366d6; padding: 16px; margin: 20px 0; border-radius: 3px;">
+        <h3 style="margin-top: 0; color: #0366d6;">Live Demo</h3>
+        <p>Try out the live demo at: <a href="https://ims.thehexters.com/login"
+                target="_blank">https://ims.thehexters.com/login</a></p>
+        <p><strong>Demo Credentials:</strong></p>
+        <ul style="margin-bottom: 0;">
+            <li><strong>Email:</strong> admin@example.com</li>
+            <li><strong>Password:</strong> password</li>
+        </ul>
+    </div>
+
+    <h2>Features</h2>
+
+    <h3>User Management &amp; Security</h3>
+    <ul>
+        <li><span class="feature-title">Role-Based Access Control (RBAC):</span> Granular permissions system with
+            customizable roles</li>
+        <li><span class="feature-title">Secure Authentication:</span> Industry-standard authentication with password
+            hashing</li>
+        <li><span class="feature-title">Admin-Authorized Registration:</span> New user accounts require admin approval
+        </li>
+        <li><span class="feature-title">User Profiles:</span> Personalized user profiles with activity tracking</li>
+    </ul>
+
+    <h3>Product Management</h3>
+    <ul>
+        <li><span class="feature-title">Comprehensive Product Catalog:</span> Detailed product information including
+            images, descriptions, and specifications</li>
+        <li><span class="feature-title">Category Organization:</span> Hierarchical category system for easy product
+            classification</li>
+        <li><span class="feature-title">Barcode Support:</span> Generate and scan product barcodes</li>
+        <li><span class="feature-title">Image Management:</span> Support for multiple image formats including WebP</li>
+        <li><span class="feature-title">Bulk Operations:</span> Import/export product data via CSV/Excel</li>
+    </ul>
+
+    <h3>Inventory Control</h3>
+    <ul>
+        <li><span class="feature-title">Real-Time Stock Tracking:</span> Accurate inventory levels updated in real-time
+        </li>
+        <li><span class="feature-title">Low Stock Alerts:</span> Automated notifications for inventory replenishment
+        </li>
+        <li><span class="feature-title">Batch/Serial Number Tracking:</span> Track products by batch or serial numbers
+        </li>
+        <li><span class="feature-title">Inventory Adjustments:</span> Record and track inventory adjustments with
+            reasons</li>
+        <li><span class="feature-title">Multi-Location Support:</span> Manage inventory across multiple warehouses or
+            locations</li>
+    </ul>
+
+    <h3>Supplier Management</h3>
+    <ul>
+        <li><span class="feature-title">Supplier Database:</span> Comprehensive supplier information and performance
+            metrics</li>
+        <li><span class="feature-title">Purchase Orders:</span> Create, track, and manage purchase orders</li>
+        <li><span class="feature-title">Supplier Performance:</span> Track supplier reliability, pricing, and delivery
+            times</li>
+    </ul>
+
+    <h3>Order Processing</h3>
+    <ul>
+        <li><span class="feature-title">Sales Order Management:</span> Create and process customer orders</li>
+        <li><span class="feature-title">Order Status Tracking:</span> Real-time updates on order fulfillment status</li>
+        <li><span class="feature-title">Invoice Generation:</span> Automatic invoice creation from orders</li>
+        <li><span class="feature-title">Returns Processing:</span> Manage product returns and exchanges</li>
+    </ul>
+
+    <h3>Reporting &amp; Analytics</h3>
+    <ul>
+        <li><span class="feature-title">Inventory Reports:</span> Stock levels, inventory valuation, and movement
+            reports</li>
+        <li><span class="feature-title">Sales Analytics:</span> Sales performance by product, category, and time period
+        </li>
+        <li><span class="feature-title">Purchase Reports:</span> Purchase history and supplier performance</li>
+        <li><span class="feature-title">Financial Summaries:</span> Cost analysis and profit margins</li>
+        <li><span class="feature-title">Custom Report Builder:</span> Create tailored reports for specific business
+            needs</li>
+        <li><span class="feature-title">Export Options:</span> Export reports to PDF, Excel, or CSV formats</li>
+    </ul>
+
+    <h3>User Interface</h3>
+    <ul>
+        <li><span class="feature-title">Responsive Design:</span> Mobile-friendly interface accessible on any device
+        </li>
+        <li><span class="feature-title">Dashboard:</span> Customizable dashboard with key metrics and alerts</li>
+        <li><span class="feature-title">Live Search:</span> Real-time search functionality across the application</li>
+        <li><span class="feature-title">Batch Operations:</span> Perform actions on multiple items simultaneously</li>
+        <li><span class="feature-title">Dark/Light Mode:</span> Visual preference options for user comfort</li>
+    </ul>
+
+    <h3>Integration &amp; Technical Features</h3>
+    <ul>
+        <li><span class="feature-title">API Access:</span> RESTful API for third-party integrations</li>
+        <li><span class="feature-title">Data Import/Export:</span> Bulk data operations via CSV/Excel</li>
+        <li><span class="feature-title">Audit Logging:</span> Comprehensive activity tracking for security and
+            accountability</li>
+        <li><span class="feature-title">Automated Backups:</span> Scheduled database backups for data protection</li>
+    </ul>
+
+    <h2>Project Setup</h2>
+
+    <p>Follow these steps to set up the Inventory Management System (IMS) project on your local machine:</p>
+
+    <h3>Prerequisites</h3>
+
+    <p>Ensure you have the following installed on your system:</p>
+    <ul>
+        <li>PHP >= 8.0</li>
+        <li>Composer</li>
+        <li>Node.js and npm</li>
+        <li>MySQL</li>
+        <li>A web server (e.g., Apache, Nginx, or Laravel's built-in server)</li>
+    </ul>
+
+    <h3>Installation Steps</h3>
+
+    <ol>
+        <li>
+            <strong>Clone the Repository</strong>
+            <div class="command">
+                <code>git clone &lt;repository-url&gt;</code><br>
+                <code>cd ims</code>
+            </div>
+        </li>
+
+        <li>
+            <strong>Install PHP Dependencies</strong>
+            <p>Run the following command to install the required PHP packages:</p>
+            <div class="command">
+                <code>composer install</code>
+            </div>
+        </li>
+
+        <li>
+            <strong>Install JavaScript Dependencies</strong>
+            <p>Run the following command to install the required JavaScript packages:</p>
+            <div class="command">
+                <code>npm install</code>
+            </div>
+        </li>
+
+        <li>
+            <strong>Set Up Environment File</strong>
+            <p>Copy the <code>.env.example</code> file to <code>.env</code> and update the environment variables as
+                needed:</p>
+            <div class="command">
+                <code>cp .env.example .env</code>
+            </div>
+            <p>Update the following variables in the <code>.env</code> file:</p>
+            <ul>
+                <li><code>DB_DATABASE</code>: Set the name of your MySQL database.</li>
+                <li><code>DB_USERNAME</code>: Set your MySQL username.</li>
+                <li><code>DB_PASSWORD</code>: Set your MySQL password.</li>
+            </ul>
+        </li>
+
+        <li>
+            <strong>Generate Application Key</strong>
+            <p>Run the following command to generate the application key:</p>
+            <div class="command">
+                <code>php artisan key:generate</code>
+            </div>
+        </li>
+
+        <li>
+            <strong>Run Migrations</strong>
+            <p>Run the following command to create the database tables:</p>
+            <div class="command">
+                <code>php artisan migrate</code>
+            </div>
+        </li>
+
+        <li>
+            <strong>Seed the Database</strong>
+            <p>(Optional) Run the following command to seed the database with sample data:</p>
+            <div class="command">
+                <code>php artisan db:seed</code>
+            </div>
+        </li>
+
+        <li>
+            <strong>Start the Development Server</strong>
+            <p>Run the following command to start the Laravel development server:</p>
+            <div class="command">
+                <code>php artisan serve</code>
+            </div>
+            <p>The application will be accessible at <code>http://localhost:8000</code>.</p>
+        </li>
+    </ol>
+
+    <h3>Additional Commands</h3>
+
+    <ul>
+        <li>
+            <strong>Run Tests</strong>
+            <p>To run the test suite, use:</p>
+            <div class="command">
+                <code>php artisan test</code>
+            </div>
+        </li>
+
+        <li>
+            <strong>Clear Cache</strong>
+            <p>To clear the application cache, use:</p>
+            <div class="command">
+                <code>php artisan cache:clear</code>
+            </div>
+        </li>
+    </ul>
+
+    <h3>Troubleshooting</h3>
+
+    <p>If you encounter any issues, ensure the following:</p>
+    <ul>
+        <li>The <code>.env</code> file is correctly configured.</li>
+        <li>The database server is running and accessible.</li>
+        <li>All dependencies are installed.</li>
+    </ul>
+
+    <p>For further assistance, refer to the Laravel documentation or contact the project maintainer.</p>
+</body>
+
+</html>
